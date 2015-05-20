@@ -9,13 +9,10 @@ SCC <- readRDS("./data_temp/exdata_data_NEI_data/Source_Classification_Code.rds"
 library(dplyr)
 data2<- NEI %>%
   filter(fips=="24510") %>%
-  group_by(year) %>%
+  group_by(year=as.factor(year)) %>%
   summarise(Total.Emissions=sum(Emissions))
-plot(x=data2$year, y=data2$Total.Emissions, type="l", col="black", 
-     main="Total emissions from PM2.5 in Baltimore, 1999-2008", xlab="Year", 
-     ylab="PM2.5 emissions, tons")
 png(filename="plot2.png", width=480, height=480, units="px")
-plot(x=data2$year, y=data2$Total.Emissions, type="l", col="black", 
-     main="Total emissions from PM2.5 in Baltimore, 1999-2008", xlab="Year", 
-     ylab="PM2.5 emissions, tons")
+barplot(data2$Total.Emissions, names.arg=data2$year, col="orange", 
+        main=expression(paste('Total emissions from PM', ''[2.5], ' in Baltimore City')), xlab="Year", 
+        ylab=expression(paste('PM', ''[2.5], ', tons')))
 dev.off()
