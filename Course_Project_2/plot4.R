@@ -12,10 +12,14 @@ SCC_Coal_ID<-SCC_Coal[,1]
 library(dplyr)
 data4<-NEI %>%
   filter(SCC %in% SCC_Coal_ID) %>%
-  group_by(year) %>%
+  group_by(year=as.factor(year)) %>%
   summarise(Total.Emissions=sum(Emissions))
 library(ggplot2)
-theme_set(theme_grey(base_size = 12)) 
-image4<-qplot(x=year, y=Total.Emissions, data=data4, geom="line",
-              main="Emissions from coal combustion-related sources, 1999-2008", xlab="Year", ylab="PM2.5 emissions, tons")
+image4<-ggplot(data=data4, aes(x=year, y=Total.Emissions)) +
+  geom_line(aes(group=1)) +
+  geom_point(aes(size = 2)) +
+  ggtitle(expression(paste('Total Emissions of PM', ''[2.5], ' from coal combustion-related sources'))) +
+  ylab(expression(paste('PM', ''[2.5], ', tons'))) +
+  xlab("Year") +
+  theme(legend.position = 'none')
 ggsave(file="plot4.png", plot=image4, dpi=75, width=200, height=80, units="mm")
